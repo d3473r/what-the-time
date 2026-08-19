@@ -54,7 +54,7 @@ function reset() {
               :value="shareLink"
               readonly
               class="flex-1 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-slate-300"
-              @focus="$event.target.select()"
+              @focus="($event.target as HTMLInputElement).select()"
             />
             <CopyButton :text="shareLink" />
           </div>
@@ -68,7 +68,7 @@ function reset() {
               readonly
               rows="3"
               class="flex-1 resize-none rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-slate-300"
-              @focus="$event.target.select()"
+              @focus="($event.target as HTMLTextAreaElement).select()"
             />
             <CopyButton :text="embedSnippet" />
           </div>

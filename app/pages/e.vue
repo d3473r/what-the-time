@@ -5,10 +5,11 @@ import { decodeEvent } from '~/composables/useEventCodec'
 const route = useRoute()
 const event = computed(() => decodeEvent(route.query.d as string))
 
-useSeoMeta(() => ({
-  title: event.value ? event.value.title : 'Event not found',
-  description: event.value ? `Countdown to ${event.value.title}` : 'Invalid event link',
-}))
+useSeoMeta({
+  title: () => (event.value ? event.value.title : 'Event not found'),
+  description: () =>
+    event.value ? `Countdown to ${event.value.title}` : 'Invalid event link',
+})
 </script>
 
 <template>
