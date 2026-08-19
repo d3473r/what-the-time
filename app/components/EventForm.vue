@@ -37,8 +37,13 @@ function handleSubmit() {
   }
 
   try {
-    const [Y, M, D] = form.date.split('-').map(Number)
-    const [h, m] = form.time.split(':').map(Number)
+    const dateParts = form.date.split('-').map(Number)
+    const timeParts = form.time.split(':').map(Number)
+    const Y = dateParts[0]!
+    const M = dateParts[1]!
+    const D = dateParts[2]!
+    const h = timeParts[0]!
+    const m = timeParts[1]!
     const instant = new TZDate(Y, M - 1, D, h, m, form.timezone)
     const iso = instant.toISOString()
 
