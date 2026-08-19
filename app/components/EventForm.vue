@@ -16,7 +16,7 @@ const form = reactive({
   date: format(new TZDate(Date.now(), localTz), 'yyyy-MM-dd'),
   time: '12:00',
   timezone: localTz,
-  url: ''
+  url: '',
 })
 
 const error = ref('')
@@ -49,7 +49,7 @@ function handleSubmit() {
 
     const payload: EventPayload = {
       t: iso,
-      title: form.title.trim()
+      title: form.title.trim(),
     }
     if (form.url.trim()) {
       payload.url = form.url.trim()
@@ -64,65 +64,55 @@ function handleSubmit() {
 </script>
 
 <template>
-  <form class="space-y-5 max-w-xl mx-auto" @submit.prevent="handleSubmit">
+  <form class="mx-auto max-w-xl space-y-5" @submit.prevent="handleSubmit">
     <div>
-      <label for="title" class="block text-sm font-medium text-slate-300 mb-1">
-        Event title
-      </label>
+      <label for="title" class="mb-1 block text-sm font-medium text-slate-300"> Event title </label>
       <input
         id="title"
         v-model="form.title"
         type="text"
         placeholder="SpaceX Starship Launch"
-        class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-      >
+        class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+      />
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <label for="date" class="block text-sm font-medium text-slate-300 mb-1">
-          Date
-        </label>
+        <label for="date" class="mb-1 block text-sm font-medium text-slate-300"> Date </label>
         <input
           id="date"
           v-model="form.date"
           type="date"
-          class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-        >
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+        />
       </div>
       <div>
-        <label for="time" class="block text-sm font-medium text-slate-300 mb-1">
-          Time
-        </label>
+        <label for="time" class="mb-1 block text-sm font-medium text-slate-300"> Time </label>
         <input
           id="time"
           v-model="form.time"
           type="time"
-          class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-        >
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+        />
       </div>
     </div>
 
     <div>
-      <label for="tz" class="block text-sm font-medium text-slate-300 mb-1">
-        Timezone
-      </label>
+      <label for="tz" class="mb-1 block text-sm font-medium text-slate-300"> Timezone </label>
       <select
         id="tz"
         v-model="form.timezone"
-        class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+        class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
       >
         <optgroup v-for="group in grouped" :key="group.region" :label="group.region">
           <option v-for="tz in group.zones" :key="tz" :value="tz">{{ tz }}</option>
         </optgroup>
       </select>
-      <p class="text-xs text-slate-500 mt-1">
-        Defaults to your local timezone ({{ localTz }}).
-      </p>
+      <p class="mt-1 text-xs text-slate-500">Defaults to your local timezone ({{ localTz }}).</p>
     </div>
 
     <div>
-      <label for="url" class="block text-sm font-medium text-slate-300 mb-1">
+      <label for="url" class="mb-1 block text-sm font-medium text-slate-300">
         Stream URL <span class="text-slate-500">(optional)</span>
       </label>
       <input
@@ -130,15 +120,15 @@ function handleSubmit() {
         v-model="form.url"
         type="url"
         placeholder="https://youtube.com/watch?v=..."
-        class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-      >
+        class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+      />
     </div>
 
-    <p v-if="error" class="text-red-400 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-sm text-red-400">{{ error }}</p>
 
     <button
       type="submit"
-      class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2.5 font-semibold text-white transition-colors"
+      class="w-full rounded-lg bg-emerald-600 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-500"
     >
       Create countdown
     </button>

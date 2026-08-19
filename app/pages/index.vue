@@ -6,14 +6,13 @@ const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
 
 const origin = import.meta.client ? window.location.origin : ''
 
-const shareLink = computed(() =>
-  result.value ? `${origin}/e?d=${result.value.encoded}` : ''
-)
+const shareLink = computed(() => (result.value ? `${origin}/e?d=${result.value.encoded}` : ''))
 
 const embedSnippet = computed(() =>
   result.value
-    ? `<script src="${origin}/widget.js"></` + `script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
-    : ''
+    ? `<script src="${origin}/widget.js"></` +
+      `script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
+    : '',
 )
 
 function handleSubmit(encoded: string, payload: EventPayload) {
@@ -29,10 +28,10 @@ function reset() {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="flex min-h-screen flex-col">
     <header class="py-8 text-center">
       <h1 class="text-4xl font-bold text-emerald-400">what-the-time-ai</h1>
-      <p class="text-slate-400 mt-2">
+      <p class="mt-2 text-slate-400">
         Create a shareable countdown. No backend — all data lives in the link.
       </p>
     </header>
@@ -42,41 +41,41 @@ function reset() {
         <EventForm @submit="handleSubmit" />
       </div>
 
-      <div v-else class="max-w-xl mx-auto space-y-8">
+      <div v-else class="mx-auto max-w-xl space-y-8">
         <div class="text-center">
-          <h2 class="text-2xl font-bold mb-1">Countdown ready!</h2>
-          <p class="text-slate-400 text-sm">Share the link or embed the widget.</p>
+          <h2 class="mb-1 text-2xl font-bold">Countdown ready!</h2>
+          <p class="text-sm text-slate-400">Share the link or embed the widget.</p>
         </div>
 
-        <div class="rounded-xl bg-slate-900 border border-slate-800 p-5">
-          <h3 class="text-sm font-medium text-slate-300 mb-2">Share link</h3>
+        <div class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+          <h3 class="mb-2 text-sm font-medium text-slate-300">Share link</h3>
           <div class="flex items-center gap-2">
             <input
               :value="shareLink"
               readonly
-              class="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-300 font-mono"
+              class="flex-1 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-slate-300"
               @focus="$event.target.select()"
-            >
+            />
             <CopyButton :text="shareLink" />
           </div>
         </div>
 
-        <div class="rounded-xl bg-slate-900 border border-slate-800 p-5">
-          <h3 class="text-sm font-medium text-slate-300 mb-2">Embed code</h3>
+        <div class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+          <h3 class="mb-2 text-sm font-medium text-slate-300">Embed code</h3>
           <div class="flex items-start gap-2">
             <textarea
               :value="embedSnippet"
               readonly
               rows="3"
-              class="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-300 font-mono resize-none"
+              class="flex-1 resize-none rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-slate-300"
               @focus="$event.target.select()"
             />
             <CopyButton :text="embedSnippet" />
           </div>
         </div>
 
-        <div class="rounded-xl bg-slate-900 border border-slate-800 p-6">
-          <h3 class="text-sm font-medium text-slate-300 mb-4 text-center">Live preview</h3>
+        <div class="rounded-xl border border-slate-800 bg-slate-900 p-6">
+          <h3 class="mb-4 text-center text-sm font-medium text-slate-300">Live preview</h3>
           <CountdownDisplay
             :target-iso="result.payload.t"
             :title="result.payload.title"
@@ -87,7 +86,7 @@ function reset() {
 
         <div class="text-center">
           <button
-            class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium transition-colors"
+            class="rounded-lg bg-slate-700 px-4 py-2 font-medium text-slate-200 transition-colors hover:bg-slate-600"
             @click="reset"
           >
             Create another
@@ -96,7 +95,7 @@ function reset() {
       </div>
     </main>
 
-    <footer class="py-4 text-center text-slate-600 text-sm">
+    <footer class="py-4 text-center text-sm text-slate-600">
       Frontend-only &middot; Data encoded in the URL
     </footer>
   </div>

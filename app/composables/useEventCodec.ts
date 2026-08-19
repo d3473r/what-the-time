@@ -17,9 +17,7 @@ export function encodeEvent(payload: EventPayload): string {
   const utf8 = unescape(encodeURIComponent(json))
   // btoa is available in browsers; in Node/Nitro use Buffer fallback
   const b64 =
-    typeof btoa !== 'undefined'
-      ? btoa(utf8)
-      : Buffer.from(utf8, 'binary').toString('base64')
+    typeof btoa !== 'undefined' ? btoa(utf8) : Buffer.from(utf8, 'binary').toString('base64')
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
@@ -38,9 +36,7 @@ export function decodeEvent(raw: string | null | undefined): EventPayload | null
     if (pad) b64 += '='.repeat(4 - pad)
 
     const utf8 =
-      typeof atob !== 'undefined'
-        ? atob(b64)
-        : Buffer.from(b64, 'base64').toString('binary')
+      typeof atob !== 'undefined' ? atob(b64) : Buffer.from(b64, 'base64').toString('binary')
     const json = decodeURIComponent(escape(utf8))
     const parsed = JSON.parse(json)
 

@@ -1,32 +1,32 @@
-(function () {
-  'use strict';
+;(function () {
+  'use strict'
 
   function decodeEvent(raw) {
-    if (!raw) return null;
+    if (!raw) return null
     try {
-      var b64 = raw.replace(/-/g, '+').replace(/_/g, '/');
-      var pad = b64.length % 4;
-      if (pad) b64 += '='.repeat(4 - pad);
-      var json = decodeURIComponent(escape(atob(b64)));
-      var parsed = JSON.parse(json);
-      if (!parsed || typeof parsed !== 'object') return null;
-      if (typeof parsed.t !== 'string' || typeof parsed.title !== 'string') return null;
-      if (Number.isNaN(Date.parse(parsed.t))) return null;
-      var result = { t: parsed.t, title: parsed.title.trim() };
+      var b64 = raw.replace(/-/g, '+').replace(/_/g, '/')
+      var pad = b64.length % 4
+      if (pad) b64 += '='.repeat(4 - pad)
+      var json = decodeURIComponent(escape(atob(b64)))
+      var parsed = JSON.parse(json)
+      if (!parsed || typeof parsed !== 'object') return null
+      if (typeof parsed.t !== 'string' || typeof parsed.title !== 'string') return null
+      if (Number.isNaN(Date.parse(parsed.t))) return null
+      var result = { t: parsed.t, title: parsed.title.trim() }
       if (typeof parsed.url === 'string' && parsed.url.trim()) {
-        result.url = parsed.url.trim();
+        result.url = parsed.url.trim()
       }
-      return result;
+      return result
     } catch (e) {
-      return null;
+      return null
     }
   }
 
   function getLocalTz() {
     try {
-      return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
     } catch (e) {
-      return 'UTC';
+      return 'UTC'
     }
   }
 
@@ -39,24 +39,24 @@
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        timeZoneName: 'short'
-      }).format(new Date(ms));
+        timeZoneName: 'short',
+      }).format(new Date(ms))
     } catch (e) {
-      return new Date(ms).toUTCString();
+      return new Date(ms).toUTCString()
     }
   }
 
   function computeState(targetMs, nowMs) {
-    var diff = Math.floor((targetMs - nowMs) / 1000);
-    var isPast = diff <= 0;
-    diff = Math.max(diff, 0);
+    var diff = Math.floor((targetMs - nowMs) / 1000)
+    var isPast = diff <= 0
+    diff = Math.max(diff, 0)
     return {
       days: Math.floor(diff / 86400),
       hours: Math.floor((diff % 86400) / 3600),
       minutes: Math.floor((diff % 3600) / 60),
       seconds: diff % 60,
-      isPast: isPast
-    };
+      isPast: isPast,
+    }
   }
 
   var STYLES = `
@@ -133,110 +133,127 @@
     .link:hover {
       background: #10b981;
     }
-  `;
+  `
 
-  var UNIT_LABELS = ['Days', 'Hours', 'Minutes', 'Seconds'];
+  var UNIT_LABELS = ['Days', 'Hours', 'Minutes', 'Seconds']
 
   class CountdownWidget extends HTMLElement {
     constructor() {
-      super();
-      this._timer = null;
-      this._event = null;
-      this._shadow = this.attachShadow({ mode: 'open' });
-      this._renderShell();
+      super()
+      this._timer = null
+      this._event = null
+      this._shadow = this.attachShadow({ mode: 'open' })
+      this._renderShell()
     }
 
     static get observedAttributes() {
-      return ['d'];
+      return ['d']
     }
 
     attributeChangedCallback() {
-      this._event = decodeEvent(this.getAttribute('d'));
-      this._update();
-      this._startOrStop();
+      this._event = decodeEvent(this.getAttribute('d'))
+      this._update()
+      this._startOrStop()
     }
 
     connectedCallback() {
-      this._event = decodeEvent(this.getAttribute('d'));
-      this._update();
-      this._startOrStop();
+      this._event = decodeEvent(this.getAttribute('d'))
+      this._update()
+      this._startOrStop()
     }
 
     disconnectedCallback() {
-      this._stop();
+      this._stop()
     }
 
     _renderShell() {
-      var style = document.createElement('style');
-      style.textContent = STYLES;
-      this._container = document.createElement('div');
-      this._shadow.appendChild(style);
-      this._shadow.appendChild(this._container);
+      var style = document.createElement('style')
+      style.textContent = STYLES
+      this._container = document.createElement('div')
+      this._shadow.appendChild(style)
+      this._shadow.appendChild(this._container)
     }
 
     _update() {
       if (!this._event) {
-        this._container.innerHTML = '<p class="error">Invalid event link</p>';
-        return;
+        this._container.innerHTML = '<p class="error">Invalid event link</p>'
+        return
       }
 
-      var targetMs = Date.parse(this._event.t);
-      var state = computeState(targetMs, Date.now());
-      var valueClass = state.isPast ? 'past' : 'active';
+      var targetMs = Date.parse(this._event.t)
+      var state = computeState(targetMs, Date.now())
+      var valueClass = state.isPast ? 'past' : 'active'
 
-      var values = [state.days, state.hours, state.minutes, state.seconds];
-      var unitsHtml = values.map(function (v, i) {
-        return (
-          '<div class="unit">' +
-          '<span class="value ' + valueClass + '">' + String(v).padStart(2, '0') + '</span>' +
-          '<span class="unit-label">' + UNIT_LABELS[i] + '</span>' +
-          '</div>'
-        );
-      }).join('');
+      var values = [state.days, state.hours, state.minutes, state.seconds]
+      var unitsHtml = values
+        .map(function (v, i) {
+          return (
+            '<div class="unit">' +
+            '<span class="value ' +
+            valueClass +
+            '">' +
+            String(v).padStart(2, '0') +
+            '</span>' +
+            '<span class="unit-label">' +
+            UNIT_LABELS[i] +
+            '</span>' +
+            '</div>'
+          )
+        })
+        .join('')
 
       var html =
-        '<div class="title">' + this._escape(this._event.title) + '</div>' +
-        '<div class="label">' + this._escape(formatTzLabel(targetMs)) + '</div>' +
-        '<div class="units">' + unitsHtml + '</div>';
+        '<div class="title">' +
+        this._escape(this._event.title) +
+        '</div>' +
+        '<div class="label">' +
+        this._escape(formatTzLabel(targetMs)) +
+        '</div>' +
+        '<div class="units">' +
+        unitsHtml +
+        '</div>'
 
       if (state.isPast) {
-        html += '<div class="ended">Event has ended</div>';
+        html += '<div class="ended">Event has ended</div>'
       }
 
       if (this._event.url) {
-        html += '<a class="link" href="' + this._escape(this._event.url) + '" target="_blank" rel="noopener noreferrer">Watch stream</a>';
+        html +=
+          '<a class="link" href="' +
+          this._escape(this._event.url) +
+          '" target="_blank" rel="noopener noreferrer">Watch stream</a>'
       }
 
-      this._container.innerHTML = html;
+      this._container.innerHTML = html
     }
 
     _startOrStop() {
-      this._stop();
+      this._stop()
       if (this._event && !computeState(Date.parse(this._event.t), Date.now()).isPast) {
-        var self = this;
+        var self = this
         this._timer = setInterval(function () {
-          var state = computeState(Date.parse(self._event.t), Date.now());
-          self._update();
-          if (state.isPast) self._stop();
-        }, 1000);
+          var state = computeState(Date.parse(self._event.t), Date.now())
+          self._update()
+          if (state.isPast) self._stop()
+        }, 1000)
       }
     }
 
     _stop() {
       if (this._timer) {
-        clearInterval(this._timer);
-        this._timer = null;
+        clearInterval(this._timer)
+        this._timer = null
       }
     }
 
     _escape(s) {
-      var d = document.createElement('div');
-      d.textContent = s;
-      return d.innerHTML;
+      var d = document.createElement('div')
+      d.textContent = s
+      return d.innerHTML
     }
   }
 
   if (!customElements.get('countdown-widget')) {
-    customElements.define('countdown-widget', CountdownWidget);
+    customElements.define('countdown-widget', CountdownWidget)
   }
-})();
+})()

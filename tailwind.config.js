@@ -1,15 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './app/**/*.{vue,js,ts}',
-    './components/**/*.{vue,js,ts}'
-  ],
+  content: ['./app/**/*.{vue,js,ts}', './components/**/*.{vue,js,ts}'],
   theme: {
     extend: {
       fontFamily: {
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace']
-      }
-    }
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
