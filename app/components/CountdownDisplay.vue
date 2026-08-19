@@ -11,6 +11,8 @@ const props = withDefaults(defineProps<{
   url?: string
   variant?: 'full' | 'embed'
 }>(), {
+  title: '',
+  url: '',
   variant: 'full'
 })
 

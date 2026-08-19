@@ -33,11 +33,11 @@ async function copy() {
 
 <template>
   <button
-    @click="copy"
     class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
     :class="copied
       ? 'bg-emerald-600 text-white'
       : 'bg-slate-700 hover:bg-slate-600 text-slate-200'"
+    @click="copy"
   >
     {{ copied ? 'Copied!' : label }}
   </button>

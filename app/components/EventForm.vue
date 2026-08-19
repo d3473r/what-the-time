@@ -57,14 +57,14 @@ function handleSubmit() {
 
     const encoded = encodeEvent(payload)
     emit('submit', encoded, payload)
-  } catch (e) {
+  } catch {
     error.value = 'Failed to create event. Please check your inputs.'
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-5 max-w-xl mx-auto">
+  <form class="space-y-5 max-w-xl mx-auto" @submit.prevent="handleSubmit">
     <div>
       <label for="title" class="block text-sm font-medium text-slate-300 mb-1">
         Event title
@@ -75,7 +75,7 @@ function handleSubmit() {
         type="text"
         placeholder="SpaceX Starship Launch"
         class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-      />
+      >
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -88,7 +88,7 @@ function handleSubmit() {
           v-model="form.date"
           type="date"
           class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-        />
+        >
       </div>
       <div>
         <label for="time" class="block text-sm font-medium text-slate-300 mb-1">
@@ -99,7 +99,7 @@ function handleSubmit() {
           v-model="form.time"
           type="time"
           class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-        />
+        >
       </div>
     </div>
 
@@ -131,7 +131,7 @@ function handleSubmit() {
         type="url"
         placeholder="https://youtube.com/watch?v=..."
         class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-      />
+      >
     </div>
 
     <p v-if="error" class="text-red-400 text-sm">{{ error }}</p>

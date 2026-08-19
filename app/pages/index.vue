@@ -12,7 +12,7 @@ const shareLink = computed(() =>
 
 const embedSnippet = computed(() =>
   result.value
-    ? `<script src="${origin}/widget.js"><\/script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
+    ? `<script src="${origin}/widget.js"></` + `script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
     : ''
 )
 
@@ -54,9 +54,9 @@ function reset() {
             <input
               :value="shareLink"
               readonly
-              @focus="$event.target.select()"
               class="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-300 font-mono"
-            />
+              @focus="$event.target.select()"
+            >
             <CopyButton :text="shareLink" />
           </div>
         </div>
@@ -68,8 +68,8 @@ function reset() {
               :value="embedSnippet"
               readonly
               rows="3"
-              @focus="$event.target.select()"
               class="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-300 font-mono resize-none"
+              @focus="$event.target.select()"
             />
             <CopyButton :text="embedSnippet" />
           </div>
@@ -87,8 +87,8 @@ function reset() {
 
         <div class="text-center">
           <button
-            @click="reset"
             class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium transition-colors"
+            @click="reset"
           >
             Create another
           </button>
