@@ -12,7 +12,7 @@ const shareLink = computed(() =>
 
 const embedSnippet = computed(() =>
   result.value
-    ? `<iframe src="${origin}/embed?d=${result.value.encoded}" width="400" height="200" frameborder="0" style="border-radius:12px"></iframe>`
+    ? `<script src="${origin}/widget.js"><\/script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
     : ''
 )
 
