@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { format } from 'date-fns'
 import { TZDate } from '@date-fns/tz'
 import { encodeEvent, type EventPayload } from '~/composables/useEventCodec'
 import { useTimezones } from '~/composables/useTimezones'
@@ -12,7 +13,7 @@ const { localTz, grouped } = useTimezones()
 
 const form = reactive({
   title: '',
-  date: '',
+  date: format(new TZDate(Date.now(), localTz), 'yyyy-MM-dd'),
   time: '12:00',
   timezone: localTz,
   url: ''
