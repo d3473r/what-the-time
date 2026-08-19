@@ -29,7 +29,7 @@ export function useTimezones() {
   const grouped = computed(() => {
     const map = new Map<string, string[]>()
     for (const tz of all) {
-      const region = tz.includes('/') ? tz.split('/')[0] : 'UTC'
+      const region = tz.includes('/') ? tz.split('/')[0]! : 'UTC'
       if (!map.has(region)) map.set(region, [])
       map.get(region)!.push(tz)
     }
