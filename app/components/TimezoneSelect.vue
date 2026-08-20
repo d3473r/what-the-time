@@ -23,31 +23,61 @@ const highlightedIndex = ref(0)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLDivElement | null>(null)
 
-const timezonesWithOffset = computed(() =>
-  all.map((tz) => ({ tz, offset: getOffset(tz) })),
+const timezonesWithMeta = computed(() =>
+  all.map((tz) => ({ tz, offset: getOffset(tz), abbr: getAbbr(tz) })),
 )
 
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
-  if (!q) return timezonesWithOffset.value.slice(0, 50)
-  return timezonesWithOffset.value
-    .filter((t) => t.tz.toLowerCase().includes(q) || t.offset.toLowerCase().includes(q))
+  if (!q) return timezonesWithMeta.value.slice(0, 50)
+  return timezonesWithMeta.value
+    .filter(
+      (t) =>
+        t.tz.toLowerCase().includes(q) ||
+        t.offset.toLowerCase().includes(q) ||
+        t.abbr.toLowerCase().includes(q),
+    )
     .slice(0, 50)
 })
 
 function getOffset(tz: string): string {
   try {
-    const now = new Date()
-    const utc = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }))
-    const local = new Date(now.toLocaleString('en-US', { timeZone: tz }))
-    const diffMin = Math.round((local.getTime() - utc.getTime()) / 60000)
-    const sign = diffMin >= 0 ? '+' : '-'
-    const abs = Math.abs(diffMin)
-    const h = Math.floor(abs / 60)
-    const m = abs % 60
-    return `UTC${sign}${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      timeZoneName: 'longOffset',
+    }).formatToParts(new Date())
+    const val = parts.find((p) => p.type === 'timeZoneName')?.value || 'UTC'
+    return val.replace('GMT', 'UTC')
   } catch {
     return 'UTC'
+  }
+}
+
+function getAbbr(tz: string): string {
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      hour: 'numeric',
+      timeZoneName: 'short',
+    }).formatToParts(new Date())
+    const short = parts.find((p) => p.type === 'timeZoneName')?.value || ''
+
+    if (short && !/^GMT/i.test(short)) return short
+
+    const longParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      hour: 'numeric',
+      timeZoneName: 'long',
+    }).formatToParts(new Date())
+    const long = longParts.find((p) => p.type === 'timeZoneName')?.value || ''
+
+    if (/^GMT/i.test(long)) return ''
+
+    const words = long.split(' ')
+    if (words.length <= 1) return long
+    return words.map((w) => w[0]).join('').toUpperCase()
+  } catch {
+    return ''
   }
 }
 
@@ -175,7 +205,9 @@ watch(
       >
         <!-- eslint-disable-next-line vue/no-v-html -- highlight is static safe markup -->
         <span v-html="highlightMatch(item.tz)" />
-        <span class="shrink-0 text-xs text-slate-500">{{ item.offset }}</span>
+        <span class="shrink-0 text-xs text-slate-500">
+          {{ item.abbr ? `${item.abbr} · ` : '' }}{{ item.offset }}
+        </span>
       </button>
     </div>
   </div>
