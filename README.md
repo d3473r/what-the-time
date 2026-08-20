@@ -2,6 +2,8 @@
 
 A frontend-only countdown application built with Nuxt 4. Create shareable countdowns to any event — all data lives in the URL, so there's no backend, no database, and no sign-up required.
 
+**Live demo:** https://d3473r.github.io/what-the-time/
+
 ## Features
 
 - **No backend** — Event data is encoded as URL-safe base64 directly in the share link (`/e?d=<encoded>`). Nothing is stored server-side.
