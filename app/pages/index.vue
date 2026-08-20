@@ -5,7 +5,7 @@ import type { EventPayload } from '~/composables/useEventCodec'
 const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
 
 const origin = import.meta.client ? window.location.origin : ''
-const base = import.meta.env.BASE_URL || '/'
+const base = useRouter().options.history.base || '/'
 
 const shareLink = computed(() => (result.value ? `${origin}${base}e?d=${result.value.encoded}` : ''))
 
