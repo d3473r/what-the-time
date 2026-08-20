@@ -61,6 +61,18 @@ function reset() {
           </div>
         </div>
 
+        <div class="rounded-xl border border-slate-800 bg-slate-900 p-6">
+          <h3 class="mb-4 text-center text-sm font-medium text-slate-300">QR code</h3>
+          <ClientOnly>
+            <QrCode :value="shareLink" />
+            <template #fallback>
+              <div class="flex justify-center">
+                <div class="h-[224px] w-[224px] animate-pulse rounded-lg bg-slate-800" />
+              </div>
+            </template>
+          </ClientOnly>
+        </div>
+
         <div class="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <h3 class="mb-2 text-sm font-medium text-slate-300">Embed code</h3>
           <div class="flex items-start gap-2">
