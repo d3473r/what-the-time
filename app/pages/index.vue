@@ -5,12 +5,13 @@ import type { EventPayload } from '~/composables/useEventCodec'
 const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
 
 const origin = import.meta.client ? window.location.origin : ''
+const base = import.meta.env.BASE_URL || '/'
 
-const shareLink = computed(() => (result.value ? `${origin}/e?d=${result.value.encoded}` : ''))
+const shareLink = computed(() => (result.value ? `${origin}${base}e?d=${result.value.encoded}` : ''))
 
 const embedSnippet = computed(() =>
   result.value
-    ? `<script src="${origin}/widget.js"></` +
+    ? `<script src="${origin}${base}widget.js"></` +
       `script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
     : '',
 )

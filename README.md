@@ -158,11 +158,30 @@ npx tsx test/codec-check.mts
 
 ## Deployment
 
-Because this is a fully frontend-only application, it can be deployed to any static host:
+### GitHub Pages
 
-- **Static hosting** (recommended): Run `pnpm generate` and deploy the `.output/public/` directory to Netlify, Vercel, Cloudflare Pages, GitHub Pages, or any static file host.
-- **Node server**: Run `pnpm build` and serve with `node .output/server/index.mjs`.
-- **Edge/CDN**: The `widget.js` file in `public/` is served as-is and should be publicly accessible for embeds to work.
+This project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys to GitHub Pages on every push to `main`.
+
+**One-time setup:**
+
+1. Go to **Settings → Pages** in your repository.
+2. Under **Source**, select **GitHub Actions**.
+3. Push to `main` — the workflow will build the site with `pnpm generate` and deploy the `.output/public/` directory.
+
+The site will be available at `https://<username>.github.io/<repo-name>/`.
+
+> **Base path**: The workflow sets `NUXT_APP_BASE_URL=/<repo-name>/` so all assets, share links, and embed URLs include the correct subpath. Local development uses `/` (no subpath). If you rename the repo, update the `NUXT_APP_BASE_URL` value in the workflow file.
+
+**Local production preview with base path:**
+
+```bash
+NUXT_APP_BASE_URL=/what-the-time/ pnpm generate
+pnpm preview
+```
+
+### Other static hosts
+
+Run `pnpm generate` and deploy the `.output/public/` directory to Netlify, Vercel, Cloudflare Pages, or any static file host. If the host serves from a subpath, set `NUXT_APP_BASE_URL` accordingly.
 
 See the [Nuxt deployment docs](https://nuxt.com/docs/getting-started/deployment) for more options.
 
