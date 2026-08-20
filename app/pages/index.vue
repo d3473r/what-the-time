@@ -30,7 +30,7 @@ function reset() {
 <template>
   <div class="flex min-h-screen flex-col">
     <header class="py-8 text-center">
-      <h1 class="text-4xl font-bold text-emerald-400">what-the-time-ai</h1>
+      <h1 class="text-4xl font-bold text-emerald-400">what-the-time</h1>
       <p class="mt-2 text-slate-400">
         Create a shareable countdown. No backend — all data lives in the link.
       </p>
