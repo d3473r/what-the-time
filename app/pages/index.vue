@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { posix as path } from 'node:path'
+import { posix as path } from 'pathe'
 import type { EventPayload } from '~/composables/useEventCodec'
 
 const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
