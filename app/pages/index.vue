@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { posix as path } from 'node:path'
 import type { EventPayload } from '~/composables/useEventCodec'
 
 const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
@@ -7,11 +8,13 @@ const result = ref<{ encoded: string; payload: EventPayload } | null>(null)
 const origin = import.meta.client ? window.location.origin : ''
 const base = useRouter().options.history.base || '/'
 
-const shareLink = computed(() => (result.value ? `${origin}${base}e?d=${result.value.encoded}` : ''))
+const shareLink = computed(() =>
+  result.value ? `${origin}${path.join(base, 'e')}?d=${result.value.encoded}` : '',
+)
 
 const embedSnippet = computed(() =>
   result.value
-    ? `<script src="${origin}${base}widget.js"></` +
+    ? `<script src="${origin}${path.join(base, 'widget.js')}"></` +
       `script>\n<countdown-widget d="${result.value.encoded}"></countdown-widget>`
     : '',
 )
