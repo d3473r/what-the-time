@@ -193,4 +193,4 @@ See the [Nuxt deployment docs](https://nuxt.com/docs/getting-started/deployment)
 
 ## License
 
-This project is private. See `package.json` for details.
+[MIT](./LICENSE)
