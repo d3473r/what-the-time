@@ -9,7 +9,7 @@ const emit = defineEmits<{
   submit: [encoded: string, payload: EventPayload]
 }>()
 
-const { localTz, grouped } = useTimezones()
+const { localTz } = useTimezones()
 
 const form = reactive({
   title: '',
@@ -99,15 +99,7 @@ function handleSubmit() {
 
     <div>
       <label for="tz" class="mb-1 block text-sm font-medium text-slate-300"> Timezone </label>
-      <select
-        id="tz"
-        v-model="form.timezone"
-        class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-      >
-        <optgroup v-for="group in grouped" :key="group.region" :label="group.region">
-          <option v-for="tz in group.zones" :key="tz" :value="tz">{{ tz }}</option>
-        </optgroup>
-      </select>
+      <TimezoneSelect id="tz" v-model="form.timezone" />
       <p class="mt-1 text-xs text-slate-500">Defaults to your local timezone ({{ localTz }}).</p>
     </div>
 
